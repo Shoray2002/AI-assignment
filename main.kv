@@ -1,0 +1,49 @@
+<MainLayout>
+    BoxLayout:
+        orientation: 'vertical'
+        size: self.parent.size
+        spacing: '10dp'
+        padding: '10dp'
+        GridLayout:
+            cols:1
+            Image:
+                source: 'scp.jpg'
+                allow_stretch: True
+                keep_ratio: False
+            GridLayout:
+                cols:2
+                size_hint:(1,0.1)
+                spacing: '20dp'
+                ToggleButton:
+                    id:"Left_toggle"
+                    text:"Add Dust"
+                    on_press: root.left_toggle(self)
+                ToggleButton:
+                    id:"Right_toggle"
+                    text:"Add Dust"
+                    on_press: root.right_toggle(self)
+        Button:
+            text:"Start"
+            font_size: '40dp'
+            size_hint:(1,0.5)
+            on_press: root.animate(self)
+    FloatLayout:
+        size: self.parent.size
+        Label:
+            pos_hint: {'center_x': .25, 'center_y': .7}
+            size_hint: (.5, .5)
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: 'dust.png'
+        Label:
+            pos_hint: {'center_x': .75, 'center_y': .7}
+            size_hint: (.5, .5)
+            canvas.after:
+                Rectangle:
+                    id:"right"
+                    pos: self.pos
+                    size: self.size
+                    source: 'dust.png'
+        
