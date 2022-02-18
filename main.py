@@ -6,7 +6,6 @@ from kivy.animation import Animation
 
 Builder.load_file('main.kv')
 
-
 class MainLayout(Widget):
     def __init__(self, **kwargs):
         super(MainLayout, self).__init__(**kwargs)

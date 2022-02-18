@@ -17,8 +17,10 @@
                         keep_ratio: False
                     ToggleButton:
                         id:"left_toggle"
-                        text:"Add Dust"
+                        text:"🧹 Add Dust"
                         size_hint:(1,0.2)
+                        font_name:"seguiemj"
+                        font_size: '20sp'
                         on_press: root.left_toggle(self)
                 GridLayout:
                     cols:1
@@ -29,10 +31,13 @@
                     ToggleButton:
                         id:"right_toggle"
                         size_hint:(1,0.2)
-                        text:"Add Dust"
+                        text:"🧹 Add Dust"
+                        font_name:"seguiemj"
+                        font_size: '20sp'
                         on_press: root.right_toggle(self)
         Button:
-            text:"Start"
+            text:"▶ Start"
+            font_name:"seguiemj"
             font_size: '40dp'
             size_hint:(1,0.5)
             on_press: root.start(self)
