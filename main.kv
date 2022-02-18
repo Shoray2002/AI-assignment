@@ -17,7 +17,7 @@
                         keep_ratio: False
                     ToggleButton:
                         id:"left_toggle"
-                        text:"🧹 Add Dust"
+                        text:"🧂 Add Salt"
                         size_hint:(1,0.2)
                         font_name:"seguiemj"
                         font_size: '20sp'
@@ -33,7 +33,7 @@
                     ToggleButton:
                         id:"right_toggle"
                         size_hint:(1,0.2)
-                        text:"🧹 Add Dust"
+                        text:"🧂 Add Salt"
                         font_name:"seguiemj"
                         font_size: '20sp'
                         background_normal: ''
@@ -45,7 +45,6 @@
             font_size: '40dp'
             size_hint:(1,0.4)
             background_normal: ''
-            # rgb(91, 192, 222)
             background_color: [91/255.0,192/255.0,222/255.0,1]
             on_press: root.start(self)
     FloatLayout:
@@ -71,7 +70,7 @@
         Label:
             id:"roomba"
             pos_hint: {'center_x': 0.25, 'center_y': .7}
-            size_hint: (0, 0)
+            size_hint: (0.2, 0.2)
             canvas.after:
                 Rectangle:
                     pos: self.pos
