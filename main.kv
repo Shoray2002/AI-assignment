@@ -6,44 +6,67 @@
         padding: '10dp'
         GridLayout:
             cols:1
-            Image:
-                source: 'scp.jpg'
-                allow_stretch: True
-                keep_ratio: False
             GridLayout:
                 cols:2
                 size_hint:(1,0.1)
-                spacing: '20dp'
-                ToggleButton:
-                    id:"Left_toggle"
-                    text:"Add Dust"
-                    on_press: root.left_toggle(self)
-                ToggleButton:
-                    id:"Right_toggle"
-                    text:"Add Dust"
-                    on_press: root.right_toggle(self)
+                GridLayout:
+                    cols:1
+                    Image:
+                        source: 'black.jpg'
+                        allow_stretch: True
+                        keep_ratio: False
+                    ToggleButton:
+                        id:"left_toggle"
+                        text:"Add Dust"
+                        size_hint:(1,0.2)
+                        on_press: root.left_toggle(self)
+                GridLayout:
+                    cols:1
+                    Image:
+                        source: 'black.jpg'
+                        allow_stretch: True
+                        keep_ratio: False
+                    ToggleButton:
+                        id:"right_toggle"
+                        size_hint:(1,0.2)
+                        text:"Add Dust"
+                        on_press: root.right_toggle(self)
         Button:
             text:"Start"
             font_size: '40dp'
             size_hint:(1,0.5)
-            on_press: root.animate(self)
+            on_press: root.start(self)
     FloatLayout:
         size: self.parent.size
         Label:
-            pos_hint: {'center_x': .25, 'center_y': .7}
-            size_hint: (.5, .5)
+            id:"left"
+            pos_hint: {'center_x': .23, 'center_y': .7}
+            size_hint: (0,0)
             canvas.before:
                 Rectangle:
+                    id: "Left_rect"
                     pos: self.pos
                     size: self.size
                     source: 'dust.png'
         Label:
-            pos_hint: {'center_x': .75, 'center_y': .7}
-            size_hint: (.5, .5)
+            id:"right"
+            pos_hint: {'center_x': .73, 'center_y': .7}
+            size_hint: (0,0)
             canvas.after:
                 Rectangle:
-                    id:"right"
+                    id:"Right_rect"
                     pos: self.pos
                     size: self.size
                     source: 'dust.png'
+        Label:
+            id:"roomba"
+            pos_hint: {'center_x': 0.75, 'center_y': .7}
+            size_hint: (0, 0)
+            canvas.after:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: 'roomba.png'
+                    
+                    
         

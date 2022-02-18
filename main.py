@@ -10,26 +10,34 @@ Builder.load_file('main.kv')
 class MainLayout(Widget):
     def __init__(self, **kwargs):
         super(MainLayout, self).__init__(**kwargs)
-        self.animation = None
+        self.right_flag = False
+        self.left_flag = False
 
     def right_toggle(self, toggle):
         if toggle.state == 'down':
-            print(self.ids)
+            # print('right toggle is down')
+            self.ids['"right"'].size_hint = (0.5, 0.5)
+            self.right_flag = True
         else:
-            print('Right toggle is up')
-            # self.ids.right.source ='dust.png'
+            self.ids['"right"'].size_hint = (0, 0)
+            self.right_flag = False
 
     def left_toggle(self, toggle):
         if toggle.state == 'down':
-            print(self.ids)
+            self.ids['"left"'].size_hint = (0.5, 0.5)
+            self.left_flag = True
         else:
-            print('left toggle is up')
-            # self.ids.right.source ='dust.png'
+            self.ids['"left"'].size_hint = (0, 0)
+            self.left_flag = False
 
-    def animate(self, widget, *args):
-        anim = Animation(size_hint=(1, 0.2), duration=1)
-        anim.start(widget)
-
+    def start(self, widget, *args):
+        change_start_size = Animation(size_hint=(1, 0.2), duration=1)
+        change_start_size.start(widget)
+        self.ids['"roomba"'].size_hint = (0.2, 0.2)
+        move_left = Animation(
+            pos_hint={'center_x': 0.25, 'center_y': 0.7}, duration=2)
+        move_left.start(self.ids['"roomba"'])
+        self.ids['"left"'].size_hint = (0.0, 0.0)
 
 class Vacuum(App):
     def build(self):
