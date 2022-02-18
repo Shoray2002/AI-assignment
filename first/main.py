@@ -7,7 +7,6 @@ from kivy.animation import Animation
 # importing the kivy style sheet
 Builder.load_file('main.kv')
 
-
 class MainLayout(Widget):
     def __init__(self, **kwargs):
         super(MainLayout, self).__init__(**kwargs)
@@ -22,22 +21,22 @@ class MainLayout(Widget):
         if toggle.state == 'down':
             self.ids['"right"'].size_hint = (0.5, 0.5)
             self.right_flag = True
-            toggle.text = '🧹 Remove Salt'
+            toggle.text = 'Remove Salt'
         else:
             self.ids['"right"'].size_hint = (0, 0)
             self.right_flag = False
-            toggle.text = '🧂 Add Salt'
+            toggle.text = 'Add Salt'
     # handling the left toggle event
 
     def left_toggle(self, toggle):
         if toggle.state == 'down':
             self.ids['"left"'].size_hint = (0.5, 0.5)
             self.left_flag = True
-            toggle.text = '🧹 Remove Salt'
+            toggle.text = 'Remove Salt'
         else:
             self.ids['"left"'].size_hint = (0, 0)
             self.left_flag = False
-            toggle.text = '🧂 Add Salt'
+            toggle.text = 'Add Salt'
 
     # handling the start event
     def start(self, widget, *args):
@@ -57,7 +56,7 @@ class MainLayout(Widget):
                 self.ids['"right"'].size_hint = (0.0, 0.0)
                 self.right_flag = False
                 self.ids['"right_toggle"'].state = 'normal'
-                self.ids['"right_toggle"'].text = '🧂 Add Salt'
+                self.ids['"right_toggle"'].text = 'Add Salt'
                 # if the roomba is in the right half of the screen and the right button is pressed
             # the roomba will move to the left
             move_left.bind(on_complete=self.edge_cases)
@@ -68,7 +67,7 @@ class MainLayout(Widget):
                 self.ids['"left"'].size_hint = (0.0, 0.0)
                 self.left_flag = False
                 self.ids['"left_toggle"'].state = 'normal'
-                self.ids['"left_toggle"'].text = '🧂 Add Salt'
+                self.ids['"left_toggle"'].text = 'Add Salt'
 
                 # if the roomba is in the left half of the screen and the left button is pressed
             # the roomba will move to the right
@@ -81,13 +80,13 @@ class MainLayout(Widget):
             self.ids['"right"'].size_hint = (0.0, 0.0)
             self.right_flag = False
             self.ids['"right_toggle"'].state = 'normal'
-            self.ids['"right_toggle"'].text = '🧂 Add Salt'
+            self.ids['"right_toggle"'].text = 'Add Salt'
 
         if (self.left_flag):
             self.ids['"left"'].size_hint = (0.0, 0.0)
             self.left_flag = False
             self.ids['"left_toggle"'].state = 'normal'
-            self.ids['"left_toggle"'].text = '🧂 Add Salt'
+            self.ids['"left_toggle"'].text = 'Add Salt'
 
 
 
