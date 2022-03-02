@@ -1,17 +1,12 @@
 import "./style.css"; //import of css styles
 import * as THREE from "three";
-import { Text } from "troika-three-text";
+// import { Text } from "troika-three-text";
 import grid from "./grid.svg";
 
 // variables
 let camera, scene, renderer;
-let sphereGeo, materials;
-let sphere, label;
-let level = 1;
-let width = 1;
-const lineMat = new THREE.LineBasicMaterial({
-  color: 0x0000ff,
-});
+let backPlaneGeo = new THREE.PlaneGeometry(60, 60, 8, 8);
+let initial_state = [3, 1, 4, 2, 0, 6, 7, 8, 5];
 init();
 
 function init() {
@@ -24,12 +19,21 @@ function init() {
     18,
     window.innerWidth / window.innerHeight,
     1,
-    100000
+    10000
   );
-  camera.position.set(0, 0, 1100);
+  camera.position.set(0, 0, 1500);
   camera.lookAt(0, 0, 0);
   scene = new THREE.Scene();
   scene.background = texture;
+  const backPlane = new THREE.Mesh(
+    backPlaneGeo,
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+    })
+  );
+
+  backPlane.position.y = 200;
+  scene.add(backPlane);
 
   // lights
   const ambientLight = new THREE.AmbientLight(0xffffff);
@@ -53,7 +57,6 @@ function init() {
     render();
   });
 }
-
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
