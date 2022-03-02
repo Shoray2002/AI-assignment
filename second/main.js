@@ -1,11 +1,12 @@
 import "./style.css"; //import of css styles
 import * as THREE from "three";
-// import { Text } from "troika-three-text";
+import { Text } from "troika-three-text";
 import grid from "./grid.svg";
 
 // variables
 let camera, scene, renderer;
 let backPlaneGeo = new THREE.PlaneGeometry(60, 60, 8, 8);
+let tileGeo = new THREE.PlaneGeometry(18, 18, 8, 8);
 let initial_state = [3, 1, 4, 2, 0, 6, 7, 8, 5];
 init();
 
@@ -25,15 +26,7 @@ function init() {
   camera.lookAt(0, 0, 0);
   scene = new THREE.Scene();
   scene.background = texture;
-  const backPlane = new THREE.Mesh(
-    backPlaneGeo,
-    new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-    })
-  );
-
-  backPlane.position.y = 200;
-  scene.add(backPlane);
+  scene.add(planeDrawer(200));
 
   // lights
   const ambientLight = new THREE.AmbientLight(0xffffff);
@@ -56,6 +49,44 @@ function init() {
     camera.updateProjectionMatrix();
     render();
   });
+}
+
+function planeDrawer(yloc) {
+  const backPlane = new THREE.Group();
+  const backPlaneStart = new THREE.Mesh(
+    backPlaneGeo,
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+    })
+  );
+  backPlane.add(backPlaneStart);
+  for (let i = 0; i < 9; i++) {
+    const label = new Text();
+    const tile = new THREE.Mesh(
+      tileGeo,
+      new THREE.MeshBasicMaterial({
+        color: 0x00ff00,
+      })
+    );
+    if (initial_state[i] !== 0) {
+      label.text = initial_state[i];
+      label.fontSize = 10;
+      label.color = 0x000000;
+      label.fontFace = "Arial";
+      label.position.x = (i % 3) * 20 - 23;
+      label.position.y = Math.floor(i / 3) * 20 - 15;
+      label.position.z = 2;
+    } else {
+      tile.material.color.setHex(0xff0000);
+    }
+    tile.position.x = (i % 3) * 20 - 20;
+    tile.position.y = Math.floor(i / 3) * 20 - 20;
+    tile.position.z = 0;
+    tile.name = i;
+    backPlane.add(label, tile);
+  }
+  backPlane.position.y = yloc;
+  return backPlane;
 }
 
 function onWindowResize() {
