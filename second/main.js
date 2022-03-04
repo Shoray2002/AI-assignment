@@ -15,7 +15,6 @@ function init() {
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(3, 3);
-
   camera = new THREE.PerspectiveCamera(
     18,
     window.innerWidth / window.innerHeight,
@@ -26,7 +25,7 @@ function init() {
   camera.lookAt(0, 0, 0);
   scene = new THREE.Scene();
   scene.background = texture;
-  scene.add(planeDrawer(200));
+  planeDrawer(200, initial_state);
 
   // lights
   const ambientLight = new THREE.AmbientLight(0xffffff);
@@ -51,7 +50,7 @@ function init() {
   });
 }
 
-function planeDrawer(yloc) {
+function planeDrawer(yloc, state_array) {
   const backPlane = new THREE.Group();
   const backPlaneStart = new THREE.Mesh(
     backPlaneGeo,
@@ -68,8 +67,8 @@ function planeDrawer(yloc) {
         color: 0x00ff00,
       })
     );
-    if (initial_state[i] !== 0) {
-      label.text = initial_state[i];
+    if (state_array[i] !== 0) {
+      label.text = state_array[i];
       label.fontSize = 10;
       label.color = 0x000000;
       label.fontFace = "Arial";
@@ -86,7 +85,13 @@ function planeDrawer(yloc) {
     backPlane.add(label, tile);
   }
   backPlane.position.y = yloc;
-  return backPlane;
+  scene.add(backPlane);
+  state_array.sort(() => Math.random() - 0.5);
+  if (yloc < 0) {
+    console.log("eend");
+  } else {
+    planeDrawer(yloc - 80, state_array);
+  }
 }
 
 function onWindowResize() {
