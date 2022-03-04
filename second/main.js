@@ -25,7 +25,7 @@ function init() {
   camera.lookAt(0, 0, 0);
   scene = new THREE.Scene();
   scene.background = texture;
-  planeDrawer(200, initial_state);
+  planeDrawer(0, 200, initial_state, null);
 
   // lights
   const ambientLight = new THREE.AmbientLight(0xffffff);
@@ -50,7 +50,51 @@ function init() {
   });
 }
 
-function planeDrawer(yloc, state_array) {
+function possibleMoves(state_array) {
+  // find the directions that are possible for the blank tile
+  let possible_moves = [];
+  let blank_tile = state_array.indexOf(0);
+  if (blank_tile % 3 !== 0) {
+    possible_moves.push("left");
+  }
+  if (blank_tile % 3 !== 2) {
+    possible_moves.push("right");
+  }
+  if (blank_tile > 2) {
+    possible_moves.push("down");
+  }
+  if (blank_tile < 6) {
+    possible_moves.push("up");
+  }
+  return possible_moves;
+}
+
+function applyMoves(state_array, move) {
+  let new_state = state_array.slice();
+  let blank_tile = state_array.indexOf(0);
+  switch (move) {
+    case "left":
+      new_state[blank_tile] = new_state[blank_tile - 1];
+      new_state[blank_tile - 1] = 0;
+      break;
+    case "right":
+      new_state[blank_tile] = new_state[blank_tile + 1];
+      new_state[blank_tile + 1] = 0;
+      break;
+    case "up":
+      new_state[blank_tile] = new_state[blank_tile - 3];
+      new_state[blank_tile - 3] = 0;
+      break;
+    case "down":
+      new_state[blank_tile] = new_state[blank_tile + 3];
+      new_state[blank_tile + 3] = 0;
+      break;
+  }
+  return new_state;
+}
+
+function planeDrawer(xloc, yloc, state_array, parent_state) {
+  let moves = possibleMoves(state_array);
   const backPlane = new THREE.Group();
   const backPlaneStart = new THREE.Mesh(
     backPlaneGeo,
@@ -84,13 +128,22 @@ function planeDrawer(yloc, state_array) {
     tile.name = i;
     backPlane.add(label, tile);
   }
+  backPlane.position.x = xloc;
   backPlane.position.y = yloc;
   scene.add(backPlane);
-  state_array.sort(() => Math.random() - 0.5);
+  // state_array.sort(() => Math.random() - 0.5);
+
   if (yloc < 0) {
-    console.log("eend");
+    console.log("TERMINATED");
   } else {
-    planeDrawer(yloc - 80, state_array);
+    for (let i = 0; i < moves.length; i++) {
+      xloc += 100;
+      const new_state = applyMoves(state_array, moves[i]);
+      if (parent_state === new_state) console.log(new_state, parent_state);
+      else {
+        planeDrawer(xloc - 250, yloc - 80, new_state, state_array);
+      }
+    }
   }
 }
 
