@@ -1,12 +1,10 @@
 import "./style.css"; //import of css styles
 import * as THREE from "three";
-import { Text } from "troika-three-text";
 import grid from "./grid.svg";
+import { backPlane } from "./backPlane.mjs";
 
 // variables
 let camera, scene, renderer;
-let backPlaneGeo = new THREE.PlaneGeometry(60, 60, 8, 8);
-let tileGeo = new THREE.PlaneGeometry(18, 18, 8, 8);
 let initial_state = [3, 1, 4, 2, 0, 6, 7, 8, 5];
 init();
 
@@ -50,10 +48,9 @@ function init() {
   });
 }
 
-function possibleMoves(state_array) {
-  // find the directions that are possible for the blank tile
+function possibleMoves(curr_state) {
   let possible_moves = [];
-  let blank_tile = state_array.indexOf(0);
+  let blank_tile = curr_state.indexOf(0);
   if (blank_tile % 3 !== 0) {
     possible_moves.push("left");
   }
@@ -69,83 +66,55 @@ function possibleMoves(state_array) {
   return possible_moves;
 }
 
-function applyMoves(state_array, move) {
-  let new_state = state_array.slice();
-  let blank_tile = state_array.indexOf(0);
-  switch (move) {
-    case "left":
-      new_state[blank_tile] = new_state[blank_tile - 1];
-      new_state[blank_tile - 1] = 0;
-      break;
-    case "right":
-      new_state[blank_tile] = new_state[blank_tile + 1];
-      new_state[blank_tile + 1] = 0;
-      break;
-    case "up":
-      new_state[blank_tile] = new_state[blank_tile - 3];
-      new_state[blank_tile - 3] = 0;
-      break;
-    case "down":
-      new_state[blank_tile] = new_state[blank_tile + 3];
-      new_state[blank_tile + 3] = 0;
-      break;
+function applyMoves(curr_state, move) {
+  let new_state = curr_state.slice();
+  let blank_tile = new_state.indexOf(0);
+  if (move === "left") {
+    new_state[blank_tile] = new_state[blank_tile - 1];
+    new_state[blank_tile - 1] = 0;
+  } else if (move === "right") {
+    new_state[blank_tile] = new_state[blank_tile + 1];
+    new_state[blank_tile + 1] = 0;
+  } else if (move === "down") {
+    new_state[blank_tile] = new_state[blank_tile + 3];
+    new_state[blank_tile + 3] = 0;
+  } else if (move === "up") {
+    new_state[blank_tile] = new_state[blank_tile - 3];
+    new_state[blank_tile - 3] = 0;
   }
   return new_state;
 }
 
 function planeDrawer(xloc, yloc, state_array, parent_state) {
   let moves = possibleMoves(state_array);
-  const backPlane = new THREE.Group();
-  const backPlaneStart = new THREE.Mesh(
-    backPlaneGeo,
-    new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-    })
-  );
-  backPlane.add(backPlaneStart);
-  for (let i = 0; i < 9; i++) {
-    const label = new Text();
-    const tile = new THREE.Mesh(
-      tileGeo,
-      new THREE.MeshBasicMaterial({
-        color: 0x00ff00,
-      })
-    );
-    if (state_array[i] !== 0) {
-      label.text = state_array[i];
-      label.fontSize = 10;
-      label.color = 0x000000;
-      label.fontFace = "Arial";
-      label.position.x = (i % 3) * 20 - 23;
-      label.position.y = Math.floor(i / 3) * 20 - 15;
-      label.position.z = 2;
-    } else {
-      tile.material.color.setHex(0xff0000);
-    }
-    tile.position.x = (i % 3) * 20 - 20;
-    tile.position.y = Math.floor(i / 3) * 20 - 20;
-    tile.position.z = 0;
-    tile.name = i;
-    backPlane.add(label, tile);
-  }
-  backPlane.position.x = xloc;
-  backPlane.position.y = yloc;
-  scene.add(backPlane);
-  // state_array.sort(() => Math.random() - 0.5);
-
-  if (yloc < 0) {
-    console.log("TERMINATED");
-  } else {
-    for (let i = 0; i < moves.length; i++) {
-      xloc += 100;
-      const new_state = applyMoves(state_array, moves[i]);
-      if (parent_state === new_state) console.log(new_state, parent_state);
-      else {
-        planeDrawer(xloc - 250, yloc - 80, new_state, state_array);
-      }
-    }
-  }
+  scene.add(backPlane(xloc, yloc, state_array, parent_state));
+  console.log(moves);
+  // if (moves.length > 0) {
+  //   for (let i = 0; i < moves.length; i++) {
+  //     let new_state = applyMoves(state_array, moves[i]);
+  //     if (new_state.toString() !== parent_state.toString()) {
+  //       planeDrawer(xloc, yloc, new_state, state_array);
+  //     }
+  //   }
+  // }
 }
+// if (yloc < -50) {
+//   console.log("TERMINATED");
+// } else {
+//   for (let i = 0; i < moves.length; i++) {
+//     // xloc += 100;
+//     const new_state = applyMoves(state_array, moves[i]);
+//     if (JSON.stringify(new_state) === JSON.stringify(parent_state))
+//       console.log(
+//         "this is new state: " + new_state,
+//         "this is parent state: " + parent_state
+//       );
+//     else {
+//       planeDrawer(xloc - 250, yloc - 80, new_state, state_array);
+//     }
+//   }
+// }
+// }
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
