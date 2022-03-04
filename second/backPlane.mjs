@@ -6,13 +6,13 @@ let tileGeo = new THREE.PlaneGeometry(18, 18, 8, 8);
 
 function backPlane(xloc, yloc, state_array) {
   const backPlane = new THREE.Group();
-  const backPlaneBase = new THREE.Mesh(
-    backPlaneGeo,
-    new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-    })
-  );
-  backPlane.add(backPlaneBase);
+  // const backPlaneBase = new THREE.Mesh(
+  //   backPlaneGeo,
+  //   new THREE.MeshBasicMaterial({
+  //     color: 0xffffff,
+  //   })
+  // );
+  // backPlane.add(backPlaneBase);
   for (let i = 0; i < 9; i++) {
     const label = new Text();
     const tile = new THREE.Mesh(

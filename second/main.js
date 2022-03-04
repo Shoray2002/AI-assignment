@@ -5,7 +5,7 @@ import { backPlane } from "./backPlane.mjs";
 
 // variables
 let camera, scene, renderer;
-let initial_state = [3, 1, 4, 2, 0, 6, 7, 8, 5];
+let initial_state = [7, 8, 5, 2, 0, 6, 3, 1, 4];
 init();
 
 function init() {
@@ -63,58 +63,53 @@ function possibleMoves(curr_state) {
   if (blank_tile < 6) {
     possible_moves.push("up");
   }
+  console.log(possible_moves);
   return possible_moves;
 }
 
 function applyMoves(curr_state, move) {
   let new_state = curr_state.slice();
   let blank_tile = new_state.indexOf(0);
-  if (move === "left") {
-    new_state[blank_tile] = new_state[blank_tile - 1];
-    new_state[blank_tile - 1] = 0;
-  } else if (move === "right") {
-    new_state[blank_tile] = new_state[blank_tile + 1];
-    new_state[blank_tile + 1] = 0;
-  } else if (move === "down") {
-    new_state[blank_tile] = new_state[blank_tile + 3];
-    new_state[blank_tile + 3] = 0;
-  } else if (move === "up") {
-    new_state[blank_tile] = new_state[blank_tile - 3];
-    new_state[blank_tile - 3] = 0;
+  switch (move) {
+    case "left":
+      new_state[blank_tile] = new_state[blank_tile - 1];
+      new_state[blank_tile - 1] = 0;
+      break;
+    case "right":
+      new_state[blank_tile] = new_state[blank_tile + 1];
+      new_state[blank_tile + 1] = 0;
+      break;
+    case "up":
+      new_state[blank_tile] = new_state[blank_tile + 3];
+      new_state[blank_tile + 3] = 0;
+      break;
+    case "down":
+      new_state[blank_tile] = new_state[blank_tile - 3];
+      new_state[blank_tile - 3] = 0;
+      break;
   }
+  console.log("newstate "+new_state);
   return new_state;
 }
 
 function planeDrawer(xloc, yloc, state_array, parent_state) {
   let moves = possibleMoves(state_array);
   scene.add(backPlane(xloc, yloc, state_array, parent_state));
-  console.log(moves);
-  // if (moves.length > 0) {
-  //   for (let i = 0; i < moves.length; i++) {
-  //     let new_state = applyMoves(state_array, moves[i]);
-  //     if (new_state.toString() !== parent_state.toString()) {
-  //       planeDrawer(xloc, yloc, new_state, state_array);
-  //     }
-  //   }
-  // }
+  if (yloc < -50) {
+    console.log("TERMINATED");
+  } else {
+    for (let i = 0; i < moves.length; i++) {
+      xloc += 200;
+      let new_state = applyMoves(state_array, moves[i]);
+      if (JSON.stringify(new_state) !== JSON.stringify(parent_state)) {
+        planeDrawer(xloc - 500, yloc - 80, new_state, state_array);
+      }
+      if (new_state === initial_state.sort()) {
+        console.log("SOLVED");
+      }
+    }
+  }
 }
-// if (yloc < -50) {
-//   console.log("TERMINATED");
-// } else {
-//   for (let i = 0; i < moves.length; i++) {
-//     // xloc += 100;
-//     const new_state = applyMoves(state_array, moves[i]);
-//     if (JSON.stringify(new_state) === JSON.stringify(parent_state))
-//       console.log(
-//         "this is new state: " + new_state,
-//         "this is parent state: " + parent_state
-//       );
-//     else {
-//       planeDrawer(xloc - 250, yloc - 80, new_state, state_array);
-//     }
-//   }
-// }
-// }
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
