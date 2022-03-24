@@ -2,7 +2,7 @@ import argparse
 import timeit
 
 # use command line arguments to read in the initial state
-# TEST CASE: python driver.py 3,1,4,2,0,6,7,8,5
+# TEST CASE: python main.py 3,1,4,2,0,6,7,8,5
 
 
 class PuzzleState:
